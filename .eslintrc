@@ -1,0 +1,7 @@
+{
+  "extends": "react",
+  "rules": {
+    "indent": ["error", 2],
+    "arrow-body-style": ["error", "as-needed"]
+  }
+}
