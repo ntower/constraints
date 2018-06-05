@@ -1,3 +1,1 @@
-export default verifier = (constraints, schedule) => {
-    return constraints.every(constraint => constraint(schedule));
-}
+export const verifier = (constraints, schedule) => constraints.every(constraint => constraint(schedule));
