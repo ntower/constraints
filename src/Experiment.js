@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Constraint from './constraints/constraint';
-import ConstraintView from './ConstraintView';
+import ConstraintView from './constraintBuilder/ConstraintView';
 //import { sampleConstraint1, sampleConstraint2, sampleConstraint3, nineToFiver, overAchiever, sampleConstraint4 } from './constraints/samples';
 //import Employee from './Employee';
 
