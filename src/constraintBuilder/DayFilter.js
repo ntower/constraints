@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 const dayNames = [
-  'All Days',
-  'Weekdays',
-  'Weekends',
   'Monday',
   'Tuesday',
   'Wednesday',
@@ -14,68 +11,77 @@ const dayNames = [
   'Sunday'
 ];
 
-const isDay = i => i > 2;
-const isWeekDay = i => i > 2 && i < 8;
-const isWeekendDay = i => i > 7;
+const allDaysFilter = () => true;
+const weekDaysFilter = (_, i) => i < 5;
+const weekEndsFilter = (_, i) => i >= 5;
 
 export default class DayFilter extends Component {
   static propTypes = {
-    onDone: PropTypes.func.isRequired
-  }
-  state = {
-    days: new Array(dayNames.length)
-      .fill(false)
+    days: PropTypes.arrayOf(PropTypes.bool).isRequired,
+    onChange: PropTypes.func.isRequired
   }
 
-  daySelected (event, i) {
-    let newDays = this.state.days.slice();
-    newDays[i] = event.target.checked;
-    // If a category was clicked, update the corresponding days.
-    if (i === 0) {
-      newDays = newDays.map((val, i) => isDay(i) ? event.target.checked : val);
-    } else if (i === 1) {
-      newDays = newDays.map((val, i) => isWeekDay(i) ? event.target.checked : val);
-    } else if (i === 2) {
-      newDays = newDays.map((val, i) => isWeekendDay(i) ? event.target.checked : val);
+  daySelected (event, indexOrFilter) {
+    let newDays;
+    if (typeof indexOrFilter === 'number') {
+      newDays = this.props.days.slice();
+      newDays[indexOrFilter] = event.target.checked;
+    } else {
+      newDays = this.props.days.slice()
+        .map((val, i) => indexOrFilter(val, i) ? event.target.checked : val);
     }
 
-    newDays[0] = newDays.filter((_, i) => isDay(i)).every(val => val);
-    newDays[1] = newDays.filter((_, i) => isWeekDay(i)).every(val => val);
-    newDays[2] = newDays.filter((_, i) => isWeekendDay(i)).every(val => val);
-
-    this.setState({
-      days: newDays
-    });
+    this.props.onChange(newDays);
   }
 
   render () {
-    const { days } = this.state;
+    const { days } = this.props;
     return (
-      <div>
-        Which days?
-        <div className="column">
-          <ul>
-            {dayNames.map((dayName, i) => (
-              <li key={i}>
-                <label className="checkbox">
-                  <input
-                    type="checkbox"
-                    checked={days[i]}
-                    onChange={event => this.daySelected(event, i)}
-                  />
+      <div className="column">
+        <ul>
+          <li key="alldays">
+            <label className="checkbox">
+              <input
+                type="checkbox"
+                checked={days.every(day => day)}
+                onChange={event => this.daySelected(event, allDaysFilter)}
+              />
+              &nbsp;All Days
+            </label>
+          </li>
+          <li key="weekdays">
+            <label className="checkbox">
+              <input
+                type="checkbox"
+                checked={days.filter(weekDaysFilter).every(day => day)}
+                onChange={event => this.daySelected(event, weekDaysFilter)}
+              />
+              &nbsp;Weekdays
+            </label>
+          </li>
+          <li key="weekends">
+            <label className="checkbox">
+              <input
+                type="checkbox"
+                checked={days.filter(weekEndsFilter).every(day => day)}
+                onChange={event => this.daySelected(event, weekEndsFilter)}
+              />
+              &nbsp;Weekends
+            </label>
+          </li>
+          {dayNames.map((dayName, i) => (
+            <li key={i}>
+              <label className="checkbox">
+                <input
+                  type="checkbox"
+                  checked={days[i]}
+                  onChange={event => this.daySelected(event, i)}
+                />
                     &nbsp;{dayName}
-                </label>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <button
-          className="button is-primary"
-          disabled={this.state.days.every(val => !val)}
-          onClick={() => this.props.onDone(this.state.days.filter((_, i) => isDay(i)))}
-        >
-          Next
-        </button>
+              </label>
+            </li>
+          ))}
+        </ul>
       </div>
     );
   }

@@ -53,3 +53,53 @@ export const overAchiever = {
   name: 'Overachiever',
   days: new Array(7).fill(twentyFourHours)
 };
+
+export const sampleSchedules = [{
+  days: [{
+    employees: 2
+  }, {
+    employees: 3
+  }, {
+    employees: 3
+  }, {
+    employees: 3
+  }, {
+    employees: 2
+  }, {
+    employees: 1
+  }, {
+    employees: 2
+  }]
+}, {
+  days: [{
+    employees: 0
+  }, {
+    employees: 2
+  }, {
+    employees: 3
+  }, {
+    employees: 2
+  }, {
+    employees: 3
+  }, {
+    employees: 1
+  }, {
+    employees: 0
+  }]
+}, {
+  days: [{
+    employees: 10
+  }, {
+    employees: 10
+  }, {
+    employees: 10
+  }, {
+    employees: 10
+  }, {
+    employees: 10
+  }, {
+    employees: 10
+  }, {
+    employees: 10
+  }]
+}];
