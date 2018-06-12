@@ -17,8 +17,8 @@ class EmployeeQuantity extends Component {
           onChange={e => this.props.onChange({ comparison: e.target.value })}
         >
           <option value="eq">Exactly</option>
-          <option value="gte">At least</option>
-          <option value="lte">At most</option>
+          <option value="lt">At least</option>
+          <option value="gt">At most</option>
         </select>
         <input
           type="number"

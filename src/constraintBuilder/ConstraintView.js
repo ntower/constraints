@@ -18,8 +18,8 @@ const dayNames = [
 
 const comparisonInEnglish = {
   eq: 'exactly',
-  gte: 'at least',
-  lte: 'at most'
+  gt: 'at most',
+  lt: 'at least'
 };
 
 const filterIndexed = R.addIndex(R.filter);
@@ -32,7 +32,7 @@ export default class ConstraintBuilder extends Component {
     step: 0,
     property: 'day',
     filter: new Array(7).fill(false),
-    comparison: 'gte',
+    comparison: 'lt',
     quantity: 0,
     importance: 0
   }
@@ -57,12 +57,12 @@ export default class ConstraintBuilder extends Component {
     if (this.state.step === 3) {
       const constraint = new Constraint(
         R.pipe(
-          R.path(this.state.property),
+          R.path([this.state.property + 's']),
           filterIndexed((_, i) => this.state.filter[i]),
           R.all(
             R.pipe(
-              R.path('employees'),
-              R[this.state.comparison](this.state.quantity)
+              R.path(['employees']),
+              R[this.state.comparison](parseInt(this.state.quantity, 10))
             )
           )
         ),
@@ -122,7 +122,7 @@ export default class ConstraintBuilder extends Component {
           <DayFilter
             days={filter}
             onChange={days => this.setState({ filter: days })}
-          />;
+          />
         </div>
       );
     } else if (step === 2) {
@@ -133,7 +133,7 @@ export default class ConstraintBuilder extends Component {
             quantity={quantity}
             comparison={comparison}
             onChange={(data) => this.setState(R.pick(['comparison', 'quantity'], data))}
-          />;
+          />
         </div>
       );
     } else if (step === 3) {
